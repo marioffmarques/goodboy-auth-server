@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Authorization\Authorization.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.0.0" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.0" />
+  </ItemGroup>
+    
+  <ItemGroup>
+    <Folder Include="Repository\" />
+    <Folder Include="EntityConfig\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="UserRepository.cs" />
+    <Compile Remove="Migrations\IdentityServer\IdentityFrameworkConfigurationDb\20180517143656_InitialAspNetIdentityFrameworkDbMigration.cs" />
+    <Compile Remove="Migrations\IdentityServer\IdentityFrameworkConfigurationDb\20180601125327_UpdateTenantSchema.Designer.cs" />
+    <Compile Remove="Migrations\IdentityServer\IdentityFrameworkConfigurationDb\20180601125327_UpdateTenantSchema.cs" />
+    <Compile Remove="Migrations\IdentityServer\IdentityFrameworkConfigurationDb\20180601131327_TenantNameUnique.Designer.cs" />
+    <Compile Remove="Migrations\IdentityServer\IdentityFrameworkConfigurationDb\20180601131327_TenantNameUnique.cs" />
+    <Compile Remove="Migrations\IdentityServer\IdentityFrameworkConfigurationDb\20180601131756_TenantNameRequired.Designer.cs" />
+    <Compile Remove="Migrations\IdentityServer\IdentityFrameworkConfigurationDb\20180601131756_TenantNameRequired.cs" />
+    <Compile Remove="Migrations\IdentityServer\IdentityFrameworkConfigurationDb\AuthorizationDbContextModelSnapshot.cs" />
+    <Compile Remove="Migrations\IdentityServer\IdentityFrameworkConfigurationDb\20180607225057_InitialAspNetIdentityFrameworkDbMigration.Designer.cs" />
+    <Compile Remove="Migrations\IdentityServer\IdentityFrameworkConfigurationDb\20180607225057_InitialAspNetIdentityFrameworkDbMigration.cs" />
+  </ItemGroup>
+</Project>

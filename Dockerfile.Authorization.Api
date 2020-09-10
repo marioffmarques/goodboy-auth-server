@@ -1,0 +1,40 @@
+FROM microsoft/dotnet:2.0-sdk AS build
+WORKDIR /app
+
+
+
+# 1. Copy csproj and restore as distinct layers
+
+COPY Authorization/*.csproj ./Authorization/
+COPY Authorization.Email/*.csproj ./Authorization.Email/
+COPY Authorization.IdentityServer4/*.csproj ./Authorization.IdentityServer4/
+COPY Authorization.Repository/*.csproj ./Authorization.Repository/
+COPY Authorization.Api/*.csproj ./Authorization.Api/
+
+RUN dotnet restore ./Authorization/
+RUN dotnet restore ./Authorization.Email/
+RUN dotnet restore ./Authorization.IdentityServer4/
+RUN dotnet restore ./Authorization.Repository/
+RUN dotnet restore ./Authorization.Api/
+
+
+# 2. Copy and build everything else
+
+COPY Authorization/. ./Authorization/
+COPY Authorization.Email/. ./Authorization.Email/
+COPY Authorization.IdentityServer4/. ./Authorization.IdentityServer4/
+COPY Authorization.Repository/. ./Authorization.Repository/
+COPY Authorization.Api/. ./Authorization.Api/
+RUN dotnet build ./Authorization.Api/
+
+
+FROM build AS publish
+WORKDIR /app/Authorization.Api
+RUN dotnet publish -f netcoreapp2.0 -o out
+
+COPY authserver.pfx ./out
+
+FROM microsoft/dotnet:2.0-runtime AS runtime
+WORKDIR /app
+COPY --from=publish /app/Authorization.Api/out ./
+ENTRYPOINT ["dotnet", "Authorization.Api.dll"]

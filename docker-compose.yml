@@ -1,0 +1,21 @@
+version: '3'
+services:
+  authapi:
+    image: authapiimage
+    container_name: authapi-ctr
+    ports:
+        - 5555:80
+    build:
+        context: ./Authorization.Api
+        dockerfile: Dockerfile.Authorization.Api
+      
+  authresourcesapi:
+    image: authresourcesapiimage
+    container_name: authresourcesapi-ctr
+    ports:
+        - 5556:80
+    build:
+        context: ./Authorization.Resources.Api
+        dockerfile: Dockerfile.Authorization.ResourcesApi
+    depends_on:
+        - authapi

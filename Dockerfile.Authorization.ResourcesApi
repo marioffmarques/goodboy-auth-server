@@ -1,0 +1,34 @@
+FROM microsoft/dotnet:2.1-sdk-alpine AS build
+WORKDIR /app
+
+
+
+# 1. Copy csproj and restore as distinct layers
+
+COPY Authorization/*.csproj ./Authorization/
+COPY Authorization.IdentityServer4/*.csproj ./Authorization.IdentityServer4/
+COPY Authorization.Repository/*.csproj ./Authorization.Repository/
+COPY Authorization.Resources.Api/*.csproj ./Authorization.Resources.Api/
+
+RUN dotnet restore ./Authorization/
+RUN dotnet restore ./Authorization.IdentityServer4/
+RUN dotnet restore ./Authorization.Repository/
+RUN dotnet restore ./Authorization.Resources.Api/
+
+
+# 2. Copy and build everything else
+
+COPY Authorization/. ./Authorization/
+COPY Authorization.IdentityServer4/. ./Authorization.IdentityServer4/
+COPY Authorization.Repository/. ./Authorization.Repository/
+COPY Authorization.Resources.Api/. ./Authorization.Resources.Api/
+RUN dotnet build ./Authorization.Resources.Api/
+
+FROM build AS publish
+WORKDIR /app/Authorization.Resources.Api
+RUN dotnet publish -f netcoreapp2.0 -o out
+
+FROM microsoft/dotnet:2.1-runtime-alpine AS runtime
+WORKDIR /app
+COPY --from=publish /app/Authorization.Resources.Api/out ./
+ENTRYPOINT ["dotnet", "Authorization.Resources.Api.dll"]
